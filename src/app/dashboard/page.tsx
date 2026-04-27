@@ -2,7 +2,7 @@ import Link from "next/link";
 import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
 import { MasteryLegend } from "@/components/MasteryLegend";
-import { formatDateET } from "@/lib/date";
+import { formatDateET, todayET } from "@/lib/date";
 import { getMasteryStatus, type TypeStats } from "@/lib/mastery";
 import type { LifeListEntry } from "@/types/database";
 
@@ -173,11 +173,12 @@ export default async function Dashboard() {
             </p>
             {profile?.last_activity_date && (
               <p className="text-xs text-ink/30 mt-0.5">
-                Last active{" "}
-                {formatDateET(profile.last_activity_date, {
-                  month: "short",
-                  day: "numeric",
-                })}
+                {profile.last_activity_date === todayET()
+                  ? "Last active Today"
+                  : `Last active ${formatDateET(profile.last_activity_date, {
+                      month: "short",
+                      day: "numeric",
+                    })}`}
               </p>
             )}
           </div>
