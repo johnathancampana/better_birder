@@ -1,0 +1,28 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(npx create-next-app@14 . --typescript --tailwind --eslint --app --src-dir --import-alias \"@/*\" --no-git)",
+      "Read(//usr/local/bin/**)",
+      "Read(//opt/homebrew/Cellar/node/24.1.0/bin/**)",
+      "Bash(brew --prefix node)",
+      "Bash(echo $PATH)",
+      "Bash(export PATH=\"/opt/homebrew/bin:$PATH\")",
+      "Bash(npx --version)",
+      "Read(//private/tmp/**)",
+      "Bash(npx create-next-app@14 better_birder_scaffold --typescript --tailwind --eslint --app --src-dir --import-alias \"@/*\" --no-git)",
+      "Bash(cp -r /tmp/better_birder_scaffold/* /tmp/better_birder_scaffold/.eslintrc.json /Users/johnathancampana/claude_code_sandbox/better_birder/)",
+      "Bash(rm -rf /tmp/better_birder_scaffold)",
+      "Bash(npm install:*)",
+      "Bash(npx next:*)",
+      "Read(//opt/homebrew/Cellar/**)",
+      "Bash(brew list:*)",
+      "Read(//Users/johnathancampana/.nvm/versions/**)",
+      "Bash(npm ls:*)",
+      "WebSearch",
+      "WebFetch(domain:birdnet-team.github.io)",
+      "WebFetch(domain:github.com)",
+      "Bash(curl -s \"https://api.ebird.org/v2/ref/taxonomy/ebird?fmt=json\")",
+      "Bash(jq '.[] | select\\(.comName | test\\(\"Northern Cardinal|Blue Jay|American Robin|Black-capped Chickadee|Tufted Titmouse|Downy Woodpecker|White-breasted Nuthatch|House Finch|American Goldfinch|Mourning Dove|House Sparrow|Song Sparrow|Red-bellied Woodpecker|Hairy Woodpecker|Dark-eyed Junco|Chipping Sparrow|European Starling|Common Grackle|Red-winged Blackbird|Baltimore Oriole|Red-tailed Hawk|Cooper'\\\\''s Hawk|Bald Eagle|Turkey Vulture|Great Blue Heron|Canada Goose|Mallard|Yellow-rumped Warbler|Yellow Warbler|Black-and-white Warbler|Common Yellowthroat|American Crow|Ruby-throated Hummingbird|Eastern Bluebird|Cedar Waxwing|Gray Catbird|Northern Mockingbird|Eastern Phoebe|Pileated Woodpecker|Barred Owl\"\\)\\) | {comName, speciesCode}')"
+    ]
+  }
+}
