@@ -28,5 +28,5 @@ export async function completeOnboarding(formData: FormData) {
   );
 
   revalidatePath("/dashboard");
-  redirect("/dashboard");
+  redirect("/dashboard?onboarded=1");
 }

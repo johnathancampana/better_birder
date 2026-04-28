@@ -15,7 +15,7 @@ export default async function SignIn({
           Welcome Back
         </h1>
         <p className="text-center text-ink/50 text-sm mb-6">
-          Sign in to continue your streak.
+          Sign in to your account.
         </p>
 
         {error && (

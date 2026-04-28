@@ -2,6 +2,7 @@ import Link from "next/link";
 import { redirect } from "next/navigation";
 import { createClient } from "@/lib/supabase/server";
 import { MasteryLegend } from "@/components/MasteryLegend";
+import { WelcomeBanner } from "@/components/WelcomeBanner";
 import { formatDateET, todayET } from "@/lib/date";
 import { getMasteryStatus, type TypeStats } from "@/lib/mastery";
 import { XPLegend } from "@/components/XPLegend";
@@ -103,7 +104,12 @@ function ProgressBar({
   );
 }
 
-export default async function Dashboard() {
+export default async function Dashboard({
+  searchParams,
+}: {
+  searchParams: Promise<{ onboarded?: string }>;
+}) {
+  const { onboarded } = await searchParams;
   const supabase = await createClient();
   const {
     data: { user },
@@ -191,6 +197,7 @@ export default async function Dashboard() {
   return (
     <main className="min-h-screen px-4 py-8 max-w-2xl mx-auto">
       <h1 className="text-2xl font-bold text-forest-green mb-6">Dashboard</h1>
+      {onboarded === "1" && <WelcomeBanner />}
 
       {/* Streak card */}
       <section className="rounded-xl border border-ink/10 bg-white p-5 mb-4">
