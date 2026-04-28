@@ -34,7 +34,7 @@ export async function startQuizSession() {
   const masteryList = (masteries as SpeciesMastery[]) || [];
 
   if (lifeList.length < 4) {
-    redirect("/life-list?error=need-more-birds");
+    redirect("/quiz?error=need-more-birds");
   }
 
   const questionCount = Math.min(10, lifeList.length);
@@ -60,7 +60,7 @@ export async function startQuizSession() {
   );
 
   if (quizzable.length < 4) {
-    redirect("/life-list?error=need-more-birds");
+    redirect("/quiz?error=need-more-birds");
   }
 
   const questions = generateQuestions(quizzable, lifeList, photoUrls, audioUrls);
@@ -200,7 +200,7 @@ export async function completeQuizSession(formData: FormData) {
   const today = todayET();
   const { data: profile } = await supabase
     .from("profiles")
-    .select("current_streak, longest_streak, last_activity_date")
+    .select("current_streak, longest_streak, last_activity_date, total_xp")
     .eq("id", user.id)
     .single();
 
@@ -213,11 +213,10 @@ export async function completeQuizSession(formData: FormData) {
         (todayDate.getTime() - lastDate.getTime()) / (1000 * 60 * 60 * 24)
       );
       if (diffDays === 0) {
-        newStreak = profile.current_streak; // Already active today
+        newStreak = profile.current_streak;
       } else if (diffDays === 1) {
         newStreak = profile.current_streak + 1;
       }
-      // else resets to 1
     }
 
     await supabase
@@ -226,6 +225,7 @@ export async function completeQuizSession(formData: FormData) {
         current_streak: newStreak,
         longest_streak: Math.max(newStreak, profile.longest_streak),
         last_activity_date: today,
+        total_xp: (profile.total_xp ?? 0) + xpEarned,
       })
       .eq("id", user.id);
   }

@@ -58,7 +58,6 @@ export default async function BirdDetail({
   const status = getMasteryStatus(sight, sound);
 
   const birdName = entry?.common_name ?? speciesCode;
-  const scientificName = entry?.scientific_name ?? "";
 
   return (
     <main className="min-h-screen px-4 py-8 max-w-2xl mx-auto">
@@ -86,8 +85,8 @@ export default async function BirdDetail({
             </span>
           )}
         </div>
-        {scientificName && (
-          <p className="text-sm text-ink/40 italic mt-1">{scientificName}</p>
+        {entry?.scientific_name && (
+          <p className="text-sm text-ink/40 italic mt-1">{entry.scientific_name}</p>
         )}
       </div>
 

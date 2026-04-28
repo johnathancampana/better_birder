@@ -106,7 +106,7 @@ export default async function LifeList() {
       {/* Suggested */}
       <section>
         <h2 className="text-sm font-medium text-ink/60 mb-3">
-          Suggested — Common in the Northeast
+          Suggested — Common in the Northeast U.S.
         </h2>
         <SuggestedBirds
           addedSpeciesCodes={addedSpeciesCodes}

@@ -23,7 +23,7 @@ export async function signUp(formData: FormData) {
     redirect(`/auth/signup?error=${encodeURIComponent(error.message)}`);
   }
 
-  redirect("/dashboard");
+  redirect("/auth/welcome");
 }
 
 export async function signIn(formData: FormData) {
@@ -32,13 +32,27 @@ export async function signIn(formData: FormData) {
   const email = formData.get("email") as string;
   const password = formData.get("password") as string;
 
-  const { error } = await supabase.auth.signInWithPassword({
+  const { data, error } = await supabase.auth.signInWithPassword({
     email,
     password,
   });
 
   if (error) {
     redirect(`/auth/signin?error=${encodeURIComponent(error.message)}`);
+  }
+
+  // Route new users to onboarding, returning users to dashboard
+  const userId = data.user?.id;
+  if (userId) {
+    const { data: entries } = await supabase
+      .from("life_list_entries")
+      .select("species_code")
+      .eq("user_id", userId)
+      .limit(1);
+
+    if (!entries || entries.length === 0) {
+      redirect("/onboarding");
+    }
   }
 
   redirect("/dashboard");

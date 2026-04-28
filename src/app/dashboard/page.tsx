@@ -4,7 +4,21 @@ import { createClient } from "@/lib/supabase/server";
 import { MasteryLegend } from "@/components/MasteryLegend";
 import { formatDateET, todayET } from "@/lib/date";
 import { getMasteryStatus, type TypeStats } from "@/lib/mastery";
+import { XPLegend } from "@/components/XPLegend";
 import type { LifeListEntry } from "@/types/database";
+
+const LEVELS = [
+  { name: "Egg",           min: 0,    max: 99   },
+  { name: "Hatchling",     min: 100,  max: 299  },
+  { name: "Fledgling",     min: 300,  max: 699  },
+  { name: "Songbird",      min: 700,  max: 1499 },
+  { name: "Field Expert",  min: 1500, max: 2999 },
+  { name: "Master Birder", min: 3000, max: Infinity },
+];
+
+function getLevel(xp: number) {
+  return LEVELS.find((l) => xp >= l.min && xp <= l.max) ?? LEVELS[0];
+}
 
 type QuestionRow = {
   species_code: string;
@@ -97,24 +111,44 @@ export default async function Dashboard() {
 
   if (!user) redirect("/auth/signin");
 
-  const [{ data: profile }, { data: entries }, { data: questionData }] =
-    await Promise.all([
-      supabase.from("profiles").select("*").eq("id", user.id).single(),
-      supabase
-        .from("life_list_entries")
-        .select("species_code, common_name, mastery_score")
-        .eq("user_id", user.id),
-      supabase
-        .from("quiz_questions")
-        .select("species_code, question_type, is_correct")
-        .not("is_correct", "is", null),
-    ]);
+  // Check life list first — redirect to onboarding before fetching anything else
+  const { data: entries } = await supabase
+    .from("life_list_entries")
+    .select("species_code, common_name, mastery_score")
+    .eq("user_id", user.id);
 
   const lifeList =
     (entries as Pick<
       LifeListEntry,
       "species_code" | "common_name" | "mastery_score"
     >[]) || [];
+
+  if (lifeList.length === 0) redirect("/onboarding");
+
+  const [{ data: profile }, { data: questionData }, { data: recentSessions }] =
+    await Promise.all([
+      supabase.from("profiles").select("*").eq("id", user.id).single(),
+      supabase
+        .from("quiz_questions")
+        .select("species_code, question_type, is_correct")
+        .not("is_correct", "is", null),
+      supabase
+        .from("quiz_sessions")
+        .select("completed_at")
+        .eq("user_id", user.id)
+        .not("completed_at", "is", null)
+        .order("completed_at", { ascending: false })
+        .limit(5),
+    ]);
+
+  const quizzedToday = (recentSessions ?? []).some((s) => {
+    if (!s.completed_at) return false;
+    return (
+      new Date(s.completed_at).toLocaleDateString("en-CA", {
+        timeZone: "America/New_York",
+      }) === todayET()
+    );
+  });
 
   const statsMap = buildStatsMap((questionData ?? []) as QuestionRow[]);
 
@@ -183,6 +217,36 @@ export default async function Dashboard() {
             )}
           </div>
         </div>
+
+        {/* XP & level */}
+        {(() => {
+          const xp = profile?.total_xp ?? 0;
+          const level = getLevel(xp);
+          const nextLevel = LEVELS[LEVELS.indexOf(level) + 1];
+          const pct = nextLevel
+            ? Math.round(((xp - level.min) / (nextLevel.min - level.min)) * 100)
+            : 100;
+          return (
+            <div className="mt-4 pt-4 border-t border-ink/5">
+              <div className="flex items-center justify-between mb-1.5">
+                <span className="text-xs font-medium text-ink/60">{level.name}</span>
+                <span className="text-xs text-ink/40">
+                  {xp.toLocaleString()} XP
+                  {nextLevel && (
+                    <span className="text-ink/30"> · {nextLevel.min.toLocaleString()} to {nextLevel.name}</span>
+                  )}
+                </span>
+              </div>
+              <div className="h-1.5 bg-ink/5 rounded-full overflow-hidden">
+                <div
+                  className="h-full bg-amber rounded-full transition-all"
+                  style={{ width: `${pct}%` }}
+                />
+              </div>
+            </div>
+          );
+        })()}
+        <XPLegend />
       </section>
 
       {/* Progress overview */}
@@ -245,8 +309,13 @@ export default async function Dashboard() {
           href="/quiz"
           className="inline-block bg-forest-green text-white font-medium py-3 px-8 rounded-xl hover:bg-forest-green/90 transition-colors"
         >
-          Start Today&apos;s Quiz
+          {quizzedToday ? "Take Another Quiz" : "Start Today\u2019s Quiz"}
         </Link>
+        {quizzedToday && (
+          <p className="text-xs text-ink/40 mt-2">
+            ✓ Daily goal complete — take another quiz to earn more XP
+          </p>
+        )}
       </div>
     </main>
   );
