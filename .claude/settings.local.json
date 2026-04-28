@@ -22,7 +22,8 @@
       "WebFetch(domain:birdnet-team.github.io)",
       "WebFetch(domain:github.com)",
       "Bash(curl -s \"https://api.ebird.org/v2/ref/taxonomy/ebird?fmt=json\")",
-      "Bash(jq '.[] | select\\(.comName | test\\(\"Northern Cardinal|Blue Jay|American Robin|Black-capped Chickadee|Tufted Titmouse|Downy Woodpecker|White-breasted Nuthatch|House Finch|American Goldfinch|Mourning Dove|House Sparrow|Song Sparrow|Red-bellied Woodpecker|Hairy Woodpecker|Dark-eyed Junco|Chipping Sparrow|European Starling|Common Grackle|Red-winged Blackbird|Baltimore Oriole|Red-tailed Hawk|Cooper'\\\\''s Hawk|Bald Eagle|Turkey Vulture|Great Blue Heron|Canada Goose|Mallard|Yellow-rumped Warbler|Yellow Warbler|Black-and-white Warbler|Common Yellowthroat|American Crow|Ruby-throated Hummingbird|Eastern Bluebird|Cedar Waxwing|Gray Catbird|Northern Mockingbird|Eastern Phoebe|Pileated Woodpecker|Barred Owl\"\\)\\) | {comName, speciesCode}')"
+      "Bash(jq '.[] | select\\(.comName | test\\(\"Northern Cardinal|Blue Jay|American Robin|Black-capped Chickadee|Tufted Titmouse|Downy Woodpecker|White-breasted Nuthatch|House Finch|American Goldfinch|Mourning Dove|House Sparrow|Song Sparrow|Red-bellied Woodpecker|Hairy Woodpecker|Dark-eyed Junco|Chipping Sparrow|European Starling|Common Grackle|Red-winged Blackbird|Baltimore Oriole|Red-tailed Hawk|Cooper'\\\\''s Hawk|Bald Eagle|Turkey Vulture|Great Blue Heron|Canada Goose|Mallard|Yellow-rumped Warbler|Yellow Warbler|Black-and-white Warbler|Common Yellowthroat|American Crow|Ruby-throated Hummingbird|Eastern Bluebird|Cedar Waxwing|Gray Catbird|Northern Mockingbird|Eastern Phoebe|Pileated Woodpecker|Barred Owl\"\\)\\) | {comName, speciesCode}')",
+      "Bash(npm run *)"
     ]
   }
 }

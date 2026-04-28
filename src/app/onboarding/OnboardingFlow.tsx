@@ -46,8 +46,8 @@ export function OnboardingFlow({
             Welcome to Better Birder
           </h1>
           <p className="text-ink/60 text-base leading-relaxed">
-            Learn to identify birds by sight and sound. Add the birds you've
-            spotted, and we'll build you a personalized quiz that gets smarter
+            Learn to identify birds by sight and sound. Add the birds you&apos;ve
+            spotted, and we&apos;ll build you a personalized quiz that gets smarter
             as you do.
           </p>
           <button
