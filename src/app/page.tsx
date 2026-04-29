@@ -1,7 +1,9 @@
+import { GoogleSignInButton } from "@/components/GoogleSignInButton";
+
 export default function Home() {
   return (
     <main className="flex min-h-screen flex-col items-center justify-center px-6">
-      <div className="text-center max-w-md">
+      <div className="text-center max-w-md w-full">
         <h1 className="text-4xl font-bold text-forest-green mb-3">
           Better Birder
         </h1>
@@ -9,12 +11,24 @@ export default function Home() {
           Learn the birds you&apos;ve found. Duolingo-style quizzes built from
           your life list.
         </p>
+
         <div className="flex flex-col gap-3">
+          <GoogleSignInButton />
+
+          <div className="relative my-1">
+            <div className="absolute inset-0 flex items-center">
+              <div className="w-full border-t border-ink/10" />
+            </div>
+            <div className="relative flex justify-center text-xs">
+              <span className="bg-warm-white px-2 text-ink/40">or continue with email</span>
+            </div>
+          </div>
+
           <a
             href="/auth/signup"
             className="inline-block bg-forest-green text-white font-medium py-3 px-6 rounded-xl hover:bg-forest-green/90 transition-colors"
           >
-            Get Started
+            Create Account
           </a>
           <a
             href="/auth/signin"
